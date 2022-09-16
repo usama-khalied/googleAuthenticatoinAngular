@@ -1,38 +1,5 @@
-<div class="jumbotron bg-transparent text-center">
-    <div class="card text-center">
-
-        <h6 class="card-header">
-
-            Login with google in angular 12
-        </h6>
-        <div class="card-block">
-            <h4 class="card-title"> Not Signed in</h4>
-            <p class="card-text"> Sign in with</p>
-        </div>
-        <div class="card-block">
-            <button (click)="signinwithgoogle()" class="btn btn-social-icon btn-google mx-1">
-                <span class="fab fa-google"></span>
-            </button>
-        </div>
-    </div>
-<div *ngIf="user" class="card text-center">
-<h6 class="card-header">
-    Login with Google in Angular 12
-</h6>
-<div class="card-block">
-
+<div id="buttonDiv"></div>
+<div id="container">
+<!-- <img [src]="'https://lh3.googleusercontent.com/a-/AFdZucpjrAswIgUXfIcUX-fge3g1tWarzU3u0i2Gw6-z5A=s96-c'" /> -->
 </div>
-<img *ngIf="user.photoUrl" src="{{user.photoUrl}}" alt="" class="card-img-top img-responsive photo">
-<div class="card-block">
-<h4 class="card-title">{{user.name}}</h4>
-<p class="card-text">{{user.email}}</p>
-<p class="card-text">Log in with : {{user.provider}}</p>
-</div>
-<div class="card-block">
-<button (click)="signoutgoogle()" class="btn btn-danger"> Sign out </button>
-
-</div>
-</div>
-
-
-</div>
+<h1></h1>
