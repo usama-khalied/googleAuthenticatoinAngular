@@ -1,223 +1,46 @@
-# Angular Social Login
+This repository is an example of how to use Google Identity Sign In with Angular, directly, without using any external library.
 
-> Use [Discussions](https://github.com/abacritt/angularx-social-login/discussions) for questions.
+You would consider to use Google Identity Library directly because:
 
-Social login and authentication module for Angular 12. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other providers also.
+1) Google Javascript library platform is deprecated and will be out of use from March 2023.
 
-Check out the [demo](https://abacritt.github.io/angularx-social-login/).
+2) At the moment, the external library for google sign in (angularx-social-login) is deprecated as well because of that.
+ 
+3) If angularx-social-login will upgrade to Google Identity it will be only for Angular13 and above. So if you have an earlier version, this could be a solution for you.
 
-### Comatibility Matrix
+# What to do:
 
-| Library Version | Angular Version |
-| --------------- | --------------- |
-| 4               | 12              |
-| 3               | 9, 10, 11       |
-| 2               | 5, 6, 7, 8      |
+1) Add the Google Identity script tag, shown on file index.html.
+2) Add a div with an Id, shown on app.component.html file.
+3) Follow the changes in app.component.ts file.
+4) Make sure to put your own google client id in its place, in the app.component.ts file.
 
-## Getting started
+*Last note, for local development, make sure you mention both http://localhost and http://localhost:4200 in google's cloud platform "Authorized Javascript Origins".
 
-### Install via npm
+# Angular13
 
-```sh
-npm i angularx-social-login
-```
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.7.
 
-### Import the module
+## Development server
 
-In your `AppModule`, import the `SocialLoginModule`
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-```javascript
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import {
-  GoogleLoginProvider,
-  FacebookLoginProvider
-} from 'angularx-social-login';
+## Code scaffolding
 
-@NgModule({
-  declarations: [
-    ...
-  ],
-  imports: [
-    ...
-    SocialLoginModule
-  ],
-  providers: [
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              'clientId'
-            )
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider('clientId')
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig,
-    }
-  ],
-  bootstrap: [...]
-})
-export class AppModule { }
-```
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-### Sign in and out users
+## Build
 
-```javascript
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-import { SocialAuthService } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+## Running unit tests
 
-@Component({
-  selector: 'app-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css']
-})
-export class DemoComponent implements OnInit {
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-  constructor(private authService: SocialAuthService) { }
+## Running end-to-end tests
 
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  }
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-  signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
+## Further help
 
-  signOut(): void {
-    this.authService.signOut();
-  }
-
-}
-```
-
-### Refresh google Auth Token
-
-Once a user is logged in manual refresh token method can be triggered
-
-```javascript
-
-import { SocialAuthService } from "angularx-social-login";
-import { GoogleLoginProvider } from "angularx-social-login";
-
-@Component({
-  selector: 'app-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css']
-})
-export class DemoComponent implements OnInit {
-
-  constructor(private authService: SocialAuthService) { }
-
-  refreshToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
-  }
-
-}
-```
-
-### Subscribe to the authentication state
-
-You are notified when user logs in or logs out. You receive a `SocialUser` object when the user logs in and a `null` when the user logs out. `SocialUser` object contains basic user information such as name, email, photo URL, etc. along with the `auth_token`. You can communicate the `auth_token` to your server to authenticate the user in server and make API calls from server.
-
-```javascript
-import { SocialAuthService } from "angularx-social-login";
-import { SocialUser } from "angularx-social-login";
-
-@Component({
-  selector: 'app-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css']
-})
-export class DemoComponent implements OnInit {
-
-  user: SocialUser;
-  loggedIn: boolean;
-
-  constructor(private authService: SocialAuthService) { }
-
-  ngOnInit() {
-    this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
-    });
-  }
-
-}
-```
-
-### Display the user information
-
-```html
-<img src="{{ user.photoUrl }}">
-<div>
-  <h4>{{ user.name }}</h4>
-  <p>{{ user.email }}</p>
-</div>
-```
-
-## Specifying custom scopes, fields etc. on initialization
-
-```javascript
-const fbLoginOptions = {
-  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
-  return_scopes: true,
-  enable_profile_selector: true
-}; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
-
-const googleLoginOptions = {
-  scope: 'profile email'
-}; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
-
-const vkLoginOptions = {
-  fields: 'photo_max,contacts', // Profile fields to return, see: https://vk.com/dev/objects/user
-  version: '5.124', // https://vk.com/dev/versions
-}; // https://vk.com/dev/users.get
-
-let config = [
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider("Google-OAuth-Client-Id", googleLoginOptions)
-  },
-  {
-    id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider("Facebook-App-Id", fbLoginOptions)
-  },
-  {
-    id: VKLoginProvider.PROVIDER_ID,
-    provider: new VKLoginProvider("VK-App-Id", vkLoginOptions)
-  },
-];
-```
-
-## Specifying custom scopes, fields etc. on login
-
-```javascript
-const fbLoginOptions = {
-  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages'
-}; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
-
-this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions);
-```
-
-## Providers
-
-|Provider|Documentation|
-|-|-|
-|MicrosoftLoginProvider|[Link](microsoft-provider.md)|
-
-## Running the demo app
-
-```sh
-ng build lib
-ng serve
-```
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
