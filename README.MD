@@ -1,3 +1,7 @@
+![image](https://user-images.githubusercontent.com/77499086/190633527-847582cf-ee1b-4bfd-b3c0-434c4864dd4c.png)
+
+
+
 This repository is an example of how to use Google Identity Sign In with Angular, directly, without using any external library.
 
 You would consider to use Google Identity Library directly because:
